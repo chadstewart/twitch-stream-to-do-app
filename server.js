@@ -2,6 +2,24 @@
 const express = require("express");
 const app = express();
 
+//Setup env variables
+require('dotenv').config();
+
+//Setup Database Connection
+const mysql = require("mysql");
+
+var con = mysql.createConnection({
+  host: process.env.DB_HOST,
+  user: process.env.DB_USER,
+  password: process.env.DB_PASS,
+  database : process.env.DB_NAME
+});
+  
+con.connect(function(err) {
+  if (err) throw err;
+  console.log("Connected!");
+});
+
 //Request Data Type
 app.use(express.urlencoded());
 
@@ -10,20 +28,20 @@ app.use(express.urlencoded());
 // that this all works.
 
 //Initial Landing
-app.get('/', (req, res) => res.redirect('/home'));
-app.get('/home', (req, res) => res.send('Hiho!!'));
+app.get('/', (req, res) => res.redirect("/home"));
+app.get('/home', (req, res) => res.send("Hiho!!"));
 
 //New Entry
-app.post('/add', function (req, res) {
+app.post("/add", function (req, res) {
 
     res.send(`You added ${req.body.entry}!`);
 
 });
 
 //Delete Entry
-app.delete('/remove', function(req, res) {
+app.delete("/remove", function(req, res) {
 
-    res.send('Delete Successful!');
+    res.send("Delete Successful!");
 
 });
 
