@@ -1,6 +1,7 @@
 // Setup server
 const express = require("express");
 const app = express();
+//const bodyParser = require('body-parser');
 
 //Setup env variables
 require('dotenv').config();
@@ -23,29 +24,22 @@ con.connect(function(err) {
 //Request Data Type
 app.use(express.urlencoded());
 
-// First route. Go to http://localhost:5000 and you should see Hello World in the
-// browser. Remember the project has no UI, so this is just for you to experience
-// that this all works.
+//Initialize Routers
+const indexRouter = require('./routes/index');
+const todoRouter = require('./routes/todo');
+const userRouter = require('./routes/user');
+const todolistRouter = require('./routes/todolist');
 
-//Initial Landing
-app.get('/', (req, res) => res.redirect("/home"));
-app.get('/home', (req, res) => res.send("Hiho!!"));
+//Initialize Request Data Type
+app.use(express.json());
+//app.use(bodyParser.json());
+//app.use(express.urlencoded({ extended: false }));
 
-//New Entry
-app.post("/add", function (req, res) {
-
-    res.send(`You added ${req.body.entry}!`);
-
-});
-
-//Delete Entry
-app.delete("/remove", function(req, res) {
-
-    res.send("Delete Successful!");
-
-});
-
-
+//Use Routers
+app.use('/', indexRouter);
+app.use('/api/todo', todoRouter);
+app.use('/api/user', userRouter);
+app.use('/api/todolist', todolistRouter);
 
 // Setup where the server listens e.g. which port. Necessary for the browser for example.
 const PORT = process.env.PORT || 5000;
