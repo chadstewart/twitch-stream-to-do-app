@@ -1,21 +1,33 @@
 const dbConnection = require("../utils/db-connection");
 
 exports.user_get = (req, res) => {
-    let sqlQuery = `
-    SELECT
-      *
-    FROM
-      Users
-    WHERE user_name='${'chadrs'}' and user_password='${'hahapasshere'}'`;
+    const query = req.query;
 
-    return dbConnection.query(sqlQuery, (err, result) => {
-        if(err) {
-            res.status(500);
-            throw err;
-        }
+    if(("userName" in query && "password" in query) &&
+       (query.userName !== '' && query.password !== '')) {
 
-        return res.status(200).send(result);
-    });
+           const { userName, password } = query;
+           const sqlQuery = `
+           SELECT
+             *
+           FROM
+             Users
+           WHERE user_name='${userName}' and user_password='${password}'`;
+
+           //Modify DB to use Unique Index
+       
+           return dbConnection.query(sqlQuery, (err, result) => {
+               if(err) {
+                   res.status(500);
+                   throw err;
+               }
+
+               if(result.length === 0) return res.status(404).send('No user was found!');       
+               return res.status(200).send(result);
+           });
+       } else {
+           return res.status(400).send('There is something wrong with your request.');
+       }
 };
 
 exports.user_new = (req, res) => {
