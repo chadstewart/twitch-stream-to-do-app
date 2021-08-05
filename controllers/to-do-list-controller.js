@@ -1,5 +1,5 @@
 exports.todolist_get = (req, res) => {
-    res.status(200).send("To Do List test successful!");
+    return res.status(200).send("To Do List test successful!");
 };
 
 exports.todolist_new = (req, res) => {

@@ -1,7 +1,7 @@
 const express = require('express');
 const router = express.Router();
 
-const todolist_controller = require('../controllers/todolistController');
+const todolist_controller = require('../controllers/to-do-list-controller');
 
 router.get('/', todolist_controller.todolist_get);
 router.post('/', todolist_controller.todolist_new);
